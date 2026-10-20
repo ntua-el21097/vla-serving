@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package policybench;
+
+// Regenerate stubs (run from the repo root, NOT from grpc_api/, so the generated
+// stub's internal import stays package-qualified as `from grpc_api import ...`):
+//   python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. grpc_api/inference.proto
+
+// One unary call == one inference step for one robot client.
+// The client blocks on Infer until the server returns its action chunk; the
+// server is free to batch this request with those of other client processes.
+service PolicyInference {
+  rpc Infer(ObservationRequest) returns (ActionChunk);
+}
+
+message ObservationRequest {
+  int32 client_id = 1;   // which robot client (assigned by the orchestrator)
+  int32 step = 2;        // inference step index for this client (0 = first obs)
+  bytes payload = 3;     // pickled preprocessed observation dict (CPU tensors)
+}
+
+message ActionChunk {
+  int32 client_id = 1;   // echoed back
+  int32 step = 2;        // echoed back
+  bytes payload = 3;     // pickled action tensor, shape (n_action_steps, action_dim)
+}

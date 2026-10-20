@@ -1,0 +1,17 @@
+# Whitelist: only the serving code is tracked. Results, job files, notes and
+# characterisation stay local.
+/*
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/policy_server.py
+!/robot_client.py
+!/orchestrator.py
+!/sweep_experiments.sh
+!/vla_serving/
+!/grpc_api/
+!/lerobot/
+
+__pycache__/
+*.pyc
+*.egg-info/
